@@ -3,7 +3,7 @@ asgiref==3.2.5
 click==7.1.1
 cv==1.0.0
 distlib==0.3.0
-Django==3.0.4
+Django==3.0.7
 docx2pdf==0.1.5
 filelock==3.0.12
 Flask==1.1.1
