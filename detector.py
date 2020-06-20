@@ -1,34 +1,42 @@
 import cv2
+import json
+
+cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
 camera = cv2.VideoCapture(0)
-detector = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
 recognizer = cv2.face.LBPHFaceRecognizer_create()
-recognizer.read('trainner/trainner.yml')
 
-while True:
-    ret, img = camera.read()
-    gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
-    face = detector.detectMultiScale(gray,scaleFactor = 1.3, minNeighbors = 5, minSize = (30,30))
+recognizer.read('trainner.yml')
+
+with open('users.json') as jsonFile:
+    users = json.load(jsonFile)
+    
+while 1:
+    ret, image = camera.read()
+
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+    face = cascade.detectMultiScale(gray, scaleFactor = 1.2, minNeighbors = 5, minSize = (30,30))
 
     for (x,y,w,h) in face:
-        cv2.rectangle(img,(x,y),(x+w,y+h),(255,255,255),2)
+        cv2.rectangle(image, (x,y), (x+w, y+h), (100,0,100), 2)
 
-        faceid, percentage = recognizer.predict(gray[y:y+h,x:x+w])
+        faceId, percentage = recognizer.predict(gray[y:y+h, x:x+w])
 
-        if percentage > 50:
-            text = 'Unknown'
+        if percentage < 50:
+            faceId = users[str(faceId)]['name']+' '+str(round(100-percentage,2))+'%'
+
         else:
-            text = str(faceid)
+             faceId = 'Unknown'
 
-        cv2.putText(img, text, (x,y+h), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,255,0), 2)
+        cv2.putText(image, faceId, (x,y+h),cv2.FONT_HERSHEY_SIMPLEX, 1, (50,255,),2)
 
-    cv2.imshow('Video',img)
+    cv2.imshow('Image',image)
 
-    if cv2.waitKey(100) & 0xFF == 27:
+    if cv2.waitKey(20) & 0xFF == ord('q'):
         break
 
 camera.release()
-cv2.destroyAlLWindows()
-
-
+cv2.destroyAllWindows()
+    
