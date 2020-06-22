@@ -1,5 +1,6 @@
 import cv2
 import json
+from spreadsheet import *
 
 cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
@@ -12,6 +13,8 @@ recognizer.read('trainner.yml')
 with open('users.json') as jsonFile:
     users = json.load(jsonFile)
     
+userList = []
+
 while 1:
     ret, image = camera.read()
 
@@ -25,7 +28,9 @@ while 1:
         faceId, percentage = recognizer.predict(gray[y:y+h, x:x+w])
 
         if percentage < 50:
+            userList.append(faceId)
             faceId = users[str(faceId)]['name']+' '+str(round(100-percentage,2))+'%'
+            
 
         else:
              faceId = 'Unknown'
@@ -39,4 +44,5 @@ while 1:
 
 camera.release()
 cv2.destroyAllWindows()
-    
+userList = list(set(userList))
+addToSpreadsheet(users,userList)
