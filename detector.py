@@ -45,4 +45,5 @@ while 1:
 camera.release()
 cv2.destroyAllWindows()
 userList = list(set(userList))
-addToSpreadsheet(users,userList)
+if userList:
+    addToSpreadsheet(users,userList)
