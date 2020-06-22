@@ -28,6 +28,8 @@ We are using LBPH (Local Binary Patterns Histograms ) classifier to recognize th
 
 - [Cascade Classifier](https://github.com/opencv/opencv/tree/master/data/haarcascades)
 
+- [gspread](https://gspread.readthedocs.io/en/latest/)
+
 - JSON
 
 ## How to run??
@@ -35,3 +37,5 @@ We are using LBPH (Local Binary Patterns Histograms ) classifier to recognize th
 1. Run create.py file to create a dataset by providing name and id, it will capture 20 images and store in dataset and convert into array, store in trainner.yml file.
 
 2. Run detector.py to detect the face. If any face stored in dataset, the name of the person will be displayed.
+
+3. The detected person's data will be added to the google form.
